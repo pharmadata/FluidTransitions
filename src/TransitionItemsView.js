@@ -53,11 +53,10 @@ export default class TransitionItemsView extends React.Component<
 
     this._transitionItems = new TransitionItems();
     this._transitionProgress = props.progress;
-    this._transitionProgress.setValue(-1); // Reset to handle first transition
     // this._transitionProgress.addListener(console.log);
 
     this.getIsPartOfSharedTransition = this.getIsPartOfSharedTransition.bind(this);
-    this.getIsPartOfTransition = this.getIsPartOfTransition.bind(this);    
+    this.getIsPartOfTransition = this.getIsPartOfTransition.bind(this);
     this.getTransitionProgress = this.getTransitionProgress.bind(this);
     this.getRoutes = this.getRoutes.bind(this);
     this.getIsAnchored = this.getIsAnchored.bind(this);
@@ -81,13 +80,13 @@ export default class TransitionItemsView extends React.Component<
 
   updateFromProps(props, prevProps) {
     if (!this._isMounted) return;
-    
+
     let { fromRoute, toRoute } = props;
     const direction = props.index >= (prevProps ? prevProps.index : Number.MIN_SAFE_INTEGER) ?
       NavigationDirection.forward : NavigationDirection.back;
 
     const index = prevProps ? props.index : 0;
-    
+
     if (toRoute !== this.state.toRoute ||
       fromRoute !== this.state.fromRoute ||
       index !== this.state.index ||
@@ -154,7 +153,7 @@ export default class TransitionItemsView extends React.Component<
     if (!item) return false;
 
     const sharedElements = this._transitionItems.getSharedElements(this.state.fromRoute, this.state.toRoute);
-    if(sharedElements && 
+    if(sharedElements &&
       (sharedElements.find(p => p.fromItem.name === item.anchor && p.fromItem.route === route)) ||
       sharedElements.find(p => p.toItem.name === item.anchor && p.toItem.route === route)) {
         return true;
@@ -167,7 +166,7 @@ export default class TransitionItemsView extends React.Component<
     if (!item || !item.shared) return false;
 
     const sharedElements = this._transitionItems.getSharedElements(this.state.fromRoute, this.state.toRoute);
-    
+
     if (sharedElements.find(pair =>
       (pair.fromItem.name === item.name && pair.fromItem.route === item.route) ||
       (pair.toItem.name === item.name && pair.toItem.route === item.route))) {
@@ -182,13 +181,13 @@ export default class TransitionItemsView extends React.Component<
 
     const transitionElements = this._transitionItems.getTransitionElements(this.state.fromRoute, this.state.toRoute);
 
-    if(transitionElements.find(o => 
+    if(transitionElements.find(o =>
       item.name === o.name && item.route === o.route)) {
       return true;
     }
     return false;
   }
-  
+
   async getViewMetrics():Metrics {
     const nodeHandle = findNodeHandle(this._viewRef);
     let viewMetrics: Metrics;
@@ -254,7 +253,7 @@ export default class TransitionItemsView extends React.Component<
     this._inUpdate = true;
 
     // Update visibility style based on calculation by re-rendering all transition elements.
-    // Ref, https://github.com/fram-x/FluidTransitions/issues/8        
+    // Ref, https://github.com/fram-x/FluidTransitions/issues/8
     this._transitionItems.getItems().forEach(item => item.reactElement.forceUpdate());
 
     // Wait a little bit to give the layout system some time to reconcile
@@ -267,12 +266,12 @@ export default class TransitionItemsView extends React.Component<
 
       if (!sharedElements.find(p => !p.fromItem.metrics || !p.toItem.metrics) &&
         !transitionElements.find(i => !i.metrics)) {
-        
+
         // HACK: Setting state in componentDidUpdate is not nice - but
         // this is the only way we can notify the transitioner that we are
         // ready to move along with the transition and we're trying to be nice
         // by waiting a few milliseconds
-        
+
         this.setState({
           ...this.state,
           sharedElements,
@@ -343,10 +342,10 @@ export default class TransitionItemsView extends React.Component<
     getDirection: PropTypes.func,
     getIndex: PropTypes.func,
     getIsPartOfSharedTransition: PropTypes.func,
-    getIsPartOfTransition: PropTypes.func,    
+    getIsPartOfTransition: PropTypes.func,
     getRoutes: PropTypes.func,
     getIsAnchored: PropTypes.func,
-    getRoutes: PropTypes.func,    
+    getRoutes: PropTypes.func,
   }
 
   static contextTypes = {
@@ -363,7 +362,7 @@ export default class TransitionItemsView extends React.Component<
       getDirection: () => (this.state.direction ?
         this.state.direction : NavigationDirection.unknown),
       getIsPartOfSharedTransition: this.getIsPartOfSharedTransition,
-      getIsPartOfTransition: this.getIsPartOfTransition,      
+      getIsPartOfTransition: this.getIsPartOfTransition,
       getIsAnchored: this.getIsAnchored,
       getRoutes: this.getRoutes
     };
