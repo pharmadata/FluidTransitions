@@ -49,7 +49,7 @@ class Transition extends React.Component<TransitionProps> {
   _animatedComponent: any;
   _outerAnimatedComponent: any;
 
-  componentDidMount() {
+  componentWillMount() {
     const { register } = this.context;
     if (register) {
       this._route = this.context.route;
